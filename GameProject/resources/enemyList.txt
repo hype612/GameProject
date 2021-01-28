@@ -1,0 +1,5 @@
+forest troll; 50; 0; 1; 5
+skeleton; 70; 0; 1.2; 5
+spider; 30; 0; 3.0; 10
+kradrug; 150; 50; 2; 10
+jogrugeth; 1000; 100; 1; 40
