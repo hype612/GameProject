@@ -86,9 +86,10 @@ public:
 	//void enterDungeon();
 };
 
+
 class Enemy : public Entity
 {
 public:
-	using Entity::Entity;
+	Enemy(std::string name, int hp, int mana, float multi, int dmg);
+	Enemy(std::string& statString);
 };
-
