@@ -3,9 +3,9 @@
 
 
 //
-//
-//Spell
-//
+//========================
+//	    Spell
+//========================
 //
 Spell::Spell()
 	: spellID("Unknown spell"), amount(0), manacost(0), description("NO SPELL DECLARED") {}
@@ -29,9 +29,9 @@ void Spell::getSpell()
 
 
 //
-//
-//Consumable
-//
+//========================
+//	Consumable
+//========================
 //
 enum class Consumable::effectType : char
 {
@@ -44,9 +44,9 @@ Consumable::Consumable(std::string consumableName, effectType type, float effect
 
 
 //
-//
-//Item
-//
+//========================
+//	   Item
+//========================
 //
 enum Item::itemType : char
 {
@@ -92,9 +92,9 @@ Item::Item(std::string propName, double propValue, Item::itemType propType) : it
 
 
 //
-//
-//Entity
-//
+//========================
+//	   Entity
+//========================
 //
 int Entity::getEntityDmg()
 {
@@ -103,9 +103,9 @@ int Entity::getEntityDmg()
 
 
 //
-//
-//Player
-//
+//========================
+//	   Player
+//========================
 //
 Player::Player(std::string initName, int initHP, int initMana, float initMulti, int initDmg)
 	: Entity(initName, initHP, initMana, initMulti, initDmg)
@@ -186,5 +186,26 @@ int Player::spellCast(int spellNum)
 		std::cout << "Not Enough Mana!\n";
 		return 0;
 	}
+}
+
+//
+//========================
+//	    Enemy
+//========================
+//
+Enemy::Enemy(std::string name, int hp, int mana, float multi, int dmg)
+	: Entity(name, hp, mana, multi, dmg) {}
+
+
+
+Enemy::Enemy(std::string& statString)
+{
+	using namespace std;
+	std::vector<std::string> stats = splitString(statString, ';');
+	entityName = stats[0];
+	entityHP = stoi(stats[1]);
+	entityMana = stoi(stats[2]);
+	multiplier = stoi(stats[3]);
+	baseDmg = stoi(stats[4]);
 }
 
