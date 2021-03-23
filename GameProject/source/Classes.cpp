@@ -41,6 +41,17 @@ Consumable::Consumable() : name("undefined"), m_Type(effectType::undefined), sca
 Consumable::Consumable(std::string consumableName, effectType type, float effectScale)
 	: name(consumableName), m_Type(type), scale(effectScale) {}
 
+Consumable::Consumable(std::string statString)
+{
+	using namespace std;
+	std::vector<std::string> stats = splitString(statString, ';');
+	name = stats[0];
+	char tempEffect = stats[1][1];
+	m_Type = (effectType)tempEffect;
+	scale = stof(stats[2]);
+}
+
+
 
 
 //
