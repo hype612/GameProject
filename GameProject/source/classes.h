@@ -2,6 +2,15 @@
 
 #include "header.h"
 
+
+
+//23.03.2021
+//As of now There's a constructor implemented for every class
+//that takes a string as an argument. Later on find a way
+//to merge this into one function/method
+
+
+
 class Spell
 {
 private:
@@ -12,6 +21,7 @@ private:
 public:
 	Spell();
 	Spell(std::string name, int size, int cost, std::string desc);
+	Spell(std::string& statString);
 
 	std::string getSpellId();
 	int getAmount();
@@ -31,6 +41,7 @@ public:
 
 	Consumable();
 	Consumable(std::string consumableName, effectType type, float effectScale);
+	Consumable(std::string& statString);
 
 };
 
@@ -44,7 +55,8 @@ public:
 	double armour;
 
 	Item(std::string propName, double propValue, Item::itemType propType);
-
+	//not yet made
+	//Item(std::string statString);
 };
 
 
