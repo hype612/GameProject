@@ -55,8 +55,7 @@ public:
 	double armour;
 
 	Item(std::string propName, double propValue, Item::itemType propType);
-	//not yet made
-	//Item(std::string statString);
+	Item(std::string& statString);
 };
 
 
