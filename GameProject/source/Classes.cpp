@@ -41,7 +41,7 @@ Consumable::Consumable() : name("undefined"), m_Type(effectType::undefined), sca
 Consumable::Consumable(std::string consumableName, effectType type, float effectScale)
 	: name(consumableName), m_Type(type), scale(effectScale) {}
 
-Consumable::Consumable(std::string statString)
+Consumable::Consumable(std::string& statString)
 {
 	using namespace std;
 	std::vector<std::string> stats = splitString(statString, ';');
@@ -98,6 +98,51 @@ Item::Item(std::string propName, double propValue, Item::itemType propType) : it
 		armour = propValue;
 	}
 }
+
+//
+//
+//whi the if?
+//you have a switch anyways
+//
+Item::Item(std::string& statString)
+{
+	using namespace std;
+	std::vector<std::string> stats = splitString(statString, ';');
+	itemName = stats[0];
+	char tempType = stats[1][1];
+	itemType tempTypetoItemType = (itemType)tempType;
+	if (tempTypetoItemType == weapon)
+	{
+		armour = NULL;
+		dmg = stoi(stats[2]);
+		type = weapon;
+	}
+	//creating a new armor 
+	else
+	{
+		dmg = NULL;
+		switch (tempTypetoItemType)
+		{
+		case Item::chest:
+			type = chest;
+			break;
+
+		case Item::hands:
+			type = hands;
+			break;
+
+		case Item::feet:
+			type = feet;
+			break;
+
+		case Item::head:
+			type = head;
+			break;
+		}
+		armour = stof(stats[2]);
+	}
+}
+
 
 
 
