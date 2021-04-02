@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "header.h"
+#include "main.h"
 #include "classes.h"
 #include <fstream>
 #include "init.h"
