@@ -1,4 +1,4 @@
-#include "header.h"
+#include "main.h"
 #include "classes.h"
 #include "dungeon.h"
 #include "events.h"
