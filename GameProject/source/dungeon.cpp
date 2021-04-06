@@ -14,7 +14,7 @@
 	
 enum Room::tileType : char
 {
-	floor = -1, wall, chest, enemy, prop
+	floor = 0, wall, chest, enemy, prop
 };
 
 
@@ -26,51 +26,50 @@ enum Room::tileType : char
 Room::Room(std::string filepath, bool encounter)
 {
     //int x, y = 8;
-	std::string line;
-	std::ifstream roomFile(filepath);
-	for (size_t i = 0; i < 8; i++)
-	{
-		std::getline(roomFile, line);
-		for (size_t j = 0; j < 8; j++)
-		{
-			map[i + j * 8] = (tileType)line[j];
-		}
-	}
+	//std::string line;
+	//std::ifstream roomFile(filepath);
+	//for (size_t i = 0; i < 8; i++)
+	//{
+	//	std::getline(roomFile, line);
+	//	for (size_t j = 0; j < 8; j++)
+	//	{
+	//		map[i + j * 8] = (tileType)line[j];
+	//	}
+	//}
 }
 
 
 Room::Room(std::vector<std::string>& layout)
 {
-    //int x, y = 8;
-	for (size_t i = 0; i < 8; i++)
-	{
-		for (size_t j = 0; j < 8; j++)
-		{
-			map[i + j * 8] = (tileType)layout[i + j * 8];
-		}
-	}
+    for(size_t i = 0; i < layout.size(); i++)
+    {
+        map[i] = layout[i];
+    }
 }
 
 void Room::printRoom()
  {
+     //map[i + j * v8]
      std::cout << " 1 = wall, 2 = chest, 3 = enemy\n";
      for (size_t i = 0; i < 8; i++)
      {
          for (size_t j = 0; j < 8; j++)
          {
              if (j == (8 - 1))
-                 std::cout << map[i + j * 8] << "\n";
+                 std::cout <<  map[i][j] << "\n";
              else
              {
-                 if (map[i + j * 8] == '0')
+                 if (map[i][j] == '0')
                      std::cout << "  ";
                  else
-                     std::cout << map[i + j * 8] << " ";
+                     std::cout << map[i][j] << " ";
              }
          }
      }
      std::cout << "\n";
  }
+
+
 
 //make it throw a quest at the end
 //for now its void
@@ -114,9 +113,4 @@ void dungeonLoop(Player& player)
     //{
     //    Dungeon::Room tRoom(paths[roomCounter], ncount[roomCounter]);
     //    tRoom.roomLoop(player);
-    
 }
-        
-
-}
-
