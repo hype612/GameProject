@@ -35,7 +35,7 @@ void Spell::getSpell()
 //
 enum class Consumable::effectType : char
 {
-	heal = 0, speedBoost, critStrike, critChance, dmgBoost, undefined
+	heal = 0, mana, critStrike, critChance, dmgBoost, undefined
 };
 Consumable::Consumable() : name("undefined"), m_Type(effectType::undefined), scale(-1) {}
 Consumable::Consumable(std::string consumableName, effectType type, float effectScale)
@@ -99,11 +99,6 @@ Item::Item(std::string propName, double propValue, Item::itemType propType) : it
 	}
 }
 
-//
-//
-//whi the if?
-//you have a switch anyways
-//
 Item::Item(std::string& statString)
 {
 	using namespace std;
@@ -117,7 +112,6 @@ Item::Item(std::string& statString)
 		dmg = stoi(stats[2]);
 		type = weapon;
 	}
-	//creating a new armor 
 	else
 	{
 		dmg = NULL;
@@ -142,7 +136,6 @@ Item::Item(std::string& statString)
 		armour = stof(stats[2]);
 	}
 }
-
 
 
 
@@ -217,6 +210,29 @@ void Player::addConsumable(std::string initName, Consumable::effectType initType
 }
 
 
+
+void Player::useConsumable(int id)
+{
+    if(inventory[id].scale == 0.0f)
+        std::cout << "there's no consumable on that slot!\n";
+    else
+    {
+       switch(inventory[id].m_Type)
+       {
+           case Consumable::effectType::heal:
+               entityHP += inventory[id].scale;
+               break;
+           case Consumable::effectType::mana:
+               entityMana += inventory[id].scale;
+               break;
+        //others not yet added
+       }
+       removeConsumable(inventory[id]);
+    }
+}
+
+
+
 void Player::removeConsumable(Consumable& consumable)
 {
 	for (size_t i = 0; i < inventory.size(); i++)
@@ -229,7 +245,6 @@ void Player::removeConsumable(Consumable& consumable)
 	}
 }
 
-//int???
 int Player::spellCast(int spellNum)
 {
 	if (entityMana + 1 > spellbook[spellNum].getCost())
@@ -264,4 +279,3 @@ Enemy::Enemy(std::string& statString)
 	multiplier = stoi(stats[3]);
 	baseDmg = stoi(stats[4]);
 }
-
