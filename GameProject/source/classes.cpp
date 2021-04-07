@@ -161,7 +161,8 @@ Player::Player(std::string initName, int initHP, int initMana, float initMulti, 
 {
 	inventory.reserve(10);
 	dungeonPos = -1;
-	globalPos = 0; 
+	globalPos = 0;
+     
 }
 
 int Player::getEntityDmg()
@@ -171,6 +172,31 @@ int Player::getEntityDmg()
 	//make weapon dmg 1 default B4
 	return 0;
 }
+
+
+
+void Player::dMove(char direction)
+{
+    switch(direction)
+    {
+        case 'w':
+            roomPos[0]--;
+            break;
+        case 'a':
+            roomPos[1]--;
+            break;
+        case 's':
+            roomPos[0]++;
+            break;
+        case 'd':
+            roomPos[1]++;
+            break;
+        default:
+            std::cout << "wrong character: not a direction\n";
+    }
+}
+
+
 
 void Player::equip(Item& item)
 {
