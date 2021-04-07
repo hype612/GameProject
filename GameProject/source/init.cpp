@@ -28,17 +28,17 @@ std::vector<std::string> splitString(const std::string& splitted,
     return tokens;
 }
 
+
+
+void playerInit()
+{
+    Player* player = new Player("Miskunn", 100, -10, 50, 1.0);
+    Item SwordOfTruth("Sword of Truth", -99, (Item::itemType)0);
+    player->equip(SwordOfTruth);
+}
+
+
 //commented out for tests sake 
-
-
-//void playerInit()
-//{
-//    Player* player = new Player("Miskunn", 100, -10, 50, 1.0);
-//    Item SwordOfTruth("Sword of Truth", -99, (Item::itemType)0);
-//    player->equip(SwordOfTruth);
-//}
-
-
 //Enemy enemyInit(std::string& enemyStats)
 //{
 //    std::vector<std::string> stats = splitString(enemyStats, ';');
