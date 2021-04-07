@@ -81,18 +81,36 @@ protected:
 class Player : public Entity
 {
 public:
+
+    //basic variables of player
 	std::vector<Consumable> inventory;
 	std::array<Item*, 5> equipment { nullptr};
 	std::array<Spell, 2> spellbook { Spell("Fireball", -50, 10, "Do you like to play with fire??"), Spell("Tome of Healing", 30, 20, "A mediocre healing spell for those who are not familiar with the way of magic") };
 	size_t dungeonPos, globalPos;
+    int roomPos[2] = {0, 0};
 
+    //constructor(s) and inherited functions
 	Player(std::string initName, int initHP, int initMana, float initMulti, int initDmg);
-
 	int getEntityDmg() override;
 
+
+    //basic functions of the player
+    void dMove(char direction);
+
+
+    //item related
 	void equip(Item& item);
+
+
+
+    //consumable related
 	void addConsumable(std::string initName, Consumable::effectType initType, float initScale);
 	void removeConsumable(Consumable& consumable);
+    void useConsumable(int id); 
+
+
+
+    //spell related
 	int spellCast(int spellNum);
 	//void enterDungeon();
 };

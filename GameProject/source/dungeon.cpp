@@ -1,4 +1,4 @@
-#include "header.h"
+#include "main.h"
 #include "classes.h"
 #include "dungeon.h"
 #include "events.h"
@@ -6,104 +6,119 @@
 
 //
 //
-//dungeon namespace
+//namespace not needed, since there are 
+//no blank functions floating in the file
 //
-//
 
-namespace Dungeon{
 
-		
-        enum Room::tileType : char
-		{
-			floor = -1, wall, chest, enemy, prop
-		};
-        
+	
+enum Room::tileType : char
+{
+	floor = 0, wall, chest, enemy, prop
+};
 
-        //8 and 8 being the x and y of the room
-        //NOTE TO SELF: add flexible sized
-        //room class in the future
-		Room::Room(std::string filepath, bool encounter)
-		{
-            //int x, y = 8;
-            isEncounterRoom = encounter;
-			std::string line;
-			std::ifstream roomFile(filepath);
-			for (size_t i = 0; i < 8; i++)
-			{
-				std::getline(roomFile, line);
-				for (size_t j = 0; j < 8; j++)
-				{
-					map[i + j * 8] = (tileType)line[j];
-				}
-			}
-		}
 
-        void Room::printRoom()
-         {
-             std::cout << " 1 = wall, 2 = chest, 3 = enemy\n";
-             for (size_t i = 0; i < 8; i++)
-             {
-                 for (size_t j = 0; j < 8; j++)
-                 {
-                     if (j == (8 - 1))
-                         std::cout << map[i + j * 8] << "\n";
-                     else
-                     {
-                         if (map[i + j * 8] == '0')
-                             std::cout << "  ";
-                         else
-                             std::cout << map[i + j * 8] << " "
- ;
-                     }
-                 }
-             }
-             std::cout << "\n";
-         }
+//8 and 8 being the x and y of the room
+//NOTE TO SELF: add flexible sized
+//room class in the future
 
-        //make it throw a quest at the end
-        //for now its void
-        void Room::roomLoop(Player& player)
-        {
-            printRoom();
-            if(isEncounterRoom)
-            {
-                Entity enemy("evilCreature", 50, 50, 1.0f, 10);
-                WorldEvent::Fight(player, enemy); 
-            }
-            else
-            {
-                std::cout << "there's some loot in this room.\nDo you want to take it?(Y/N) ";
-                char action;
-			    std::cin >> action;
-                if(action == 'y')
-                {
-                    std::cout << "Taking loot...\n";
-                    /*
-                    for_each(Consumable loot in ConsumableList)
-                    {
-                       player.addConsumable();
-                    }
-                    */
-                }
-                std::cout << "leaving the room..\n";
-            }
-        }
 
-        void dungeonLoop(Player& player)
-        {
-            //now 2 const rooms
-            //there'll be added support for flexible 
-            //sized dungeons
-            std::array<const char*, 2> paths{"../resources/room.txt", "../resources/bossroom.txt"};
-            std::array<bool, 2> ncount{false, true};
-            
-            for(int roomCounter = 0; roomCounter < paths.size(); roomCounter++)
-            {
-                Dungeon::Room tRoom(paths[roomCounter], ncount[roomCounter]);
-                tRoom.roomLoop(player);
-            }
-                 
+Room::Room(std::string filepath, bool encounter)
+{
+    //int x, y = 8;
+	//std::string line;
+	//std::ifstream roomFile(filepath);
+	//for (size_t i = 0; i < 8; i++)
+	//{
+	//	std::getline(roomFile, line);
+	//	for (size_t j = 0; j < 8; j++)
+	//	{
+	//		map[i + j * 8] = (tileType)line[j];
+	//	}
+	//}
+}
 
+
+Room::Room(std::vector<std::string>& layout)
+{
+    //int x, y = 8;
+	//for (size_t i = 0; i < 8; i++)
+	//{
+	//	for (size_t j = 0; j < 8; j++)
+	//	{
+	//		map[i + j * 8] = (Room::tileType)tempArray[i + j * 8];
+	//	}
+	//}
+    for(size_t i = 0; i < layout.size(); i++)
+    {
+        map[i] = layout[i];
     }
 }
 
+void Room::printRoom(int xpos, int ypos)
+ {
+     //map[i + j * v8]
+     std::cout << " 1 = wall, 2 = chest, 3 = enemy\n";
+     for (size_t i = 0; i < 8; i++)
+     {
+         for (size_t j = 0; j < 8; j++)
+         {
+             if (xpos == i && ypos == j)
+             {
+                 std::cout << " o ";
+                 continue;
+             }
+             else
+             {
+                //if (j == (8 - 1))
+                //    std::cout <<  map[i][j] << "\n";
+                //else
+                //{
+                  if (map[i][j] == '0')
+                     std::cout << "   ";
+                 else
+                     std::cout << " " << map[i][j] << " ";
+                //}
+             }
+         }
+         std::cout << "\n";
+     }
+     std::cout << "\n";
+ }
+
+
+
+//make it throw a quest at the end
+//for now its void
+void Room::roomLoop(Player& player)
+{
+    std::vector<Enemy> hostiles;
+    player.roomPos[0] = 1;
+    player.roomPos[1] = 1;
+    for(size_t i = 0; i < enemyCount; i++)
+    {
+        hostiles.push_back();
+    }
+    char moveDirection;
+    while(player.roomPos[0] != 8 && player.roomPos[1] != 8)
+    {
+        std::cout << player.roomPos[0] << ":" << player.roomPos[1] << std::endl;
+        printRoom(player.roomPos[0], player.roomPos[1]);
+        std::cin >> moveDirection;
+        player.dMove(moveDirection);
+        system("clear");
+    }
+}
+
+void dungeonLoop(Player& player)
+{
+
+    //=========================================================
+    //Same goes for this. IDK why I even wrote this, 
+    //I always planned that the player will be able to move
+    //in the room, not just enter it.
+    //__________________________________________
+    //also, just straight up make it take the number of rooms as
+    //an argument
+    //=========================================================
+}
