@@ -41,13 +41,21 @@ Room::Room(std::string filepath, bool encounter)
 
 Room::Room(std::vector<std::string>& layout)
 {
+    //int x, y = 8;
+	//for (size_t i = 0; i < 8; i++)
+	//{
+	//	for (size_t j = 0; j < 8; j++)
+	//	{
+	//		map[i + j * 8] = (Room::tileType)tempArray[i + j * 8];
+	//	}
+	//}
     for(size_t i = 0; i < layout.size(); i++)
     {
         map[i] = layout[i];
     }
 }
 
-void Room::printRoom()
+void Room::printRoom(int xpos, int ypos)
  {
      //map[i + j * v8]
      std::cout << " 1 = wall, 2 = chest, 3 = enemy\n";
@@ -55,16 +63,25 @@ void Room::printRoom()
      {
          for (size_t j = 0; j < 8; j++)
          {
-             if (j == (8 - 1))
-                 std::cout <<  map[i][j] << "\n";
+             if (xpos == i && ypos == j)
+             {
+                 std::cout << " o ";
+                 continue;
+             }
              else
              {
-                 if (map[i][j] == '0')
-                     std::cout << "  ";
+                //if (j == (8 - 1))
+                //    std::cout <<  map[i][j] << "\n";
+                //else
+                //{
+                  if (map[i][j] == '0')
+                     std::cout << "   ";
                  else
-                     std::cout << map[i][j] << " ";
+                     std::cout << " " << map[i][j] << " ";
+                //}
              }
          }
+         std::cout << "\n";
      }
      std::cout << "\n";
  }
@@ -75,20 +92,22 @@ void Room::printRoom()
 //for now its void
 void Room::roomLoop(Player& player)
 {
-        //==============================================
-        //you should write a different function later on
-        //when the player can actually move in the room
-        //and alltogether in the dungeon.
-        //==============================================
-    //printRoom();
-    //if(isEncounterRoom)
-    //{
-    //    Entity enemy("evilCreature", 50, 50, 1.0f, 10);
-    //    WorldEvent::Fight(player, enemy); 
-    //}
-    //else
-    //{
-    //}
+    std::vector<Enemy> hostiles;
+    player.roomPos[0] = 1;
+    player.roomPos[1] = 1;
+    for(size_t i = 0; i < enemyCount; i++)
+    {
+        hostiles.push_back();
+    }
+    char moveDirection;
+    while(player.roomPos[0] != 8 && player.roomPos[1] != 8)
+    {
+        std::cout << player.roomPos[0] << ":" << player.roomPos[1] << std::endl;
+        printRoom(player.roomPos[0], player.roomPos[1]);
+        std::cin >> moveDirection;
+        player.dMove(moveDirection);
+        system("clear");
+    }
 }
 
 void dungeonLoop(Player& player)
@@ -102,15 +121,4 @@ void dungeonLoop(Player& player)
     //also, just straight up make it take the number of rooms as
     //an argument
     //=========================================================
-
-    //now 2 const rooms
-    //there'll be added support for flexible 
-    //sized dungeons
-    //std::array<const char*, 2> paths{"../resources/room.txt", "../resources/bossroom.txt"};
-    //std::array<bool, 2> ncount{false, true};
-    
-    //for(int roomCounter = 0; roomCounter < paths.size(); roomCounter++)
-    //{
-    //    Dungeon::Room tRoom(paths[roomCounter], ncount[roomCounter]);
-    //    tRoom.roomLoop(player);
 }
