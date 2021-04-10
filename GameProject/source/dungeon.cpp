@@ -2,8 +2,8 @@
 #include "classes.h"
 #include "dungeon.h"
 #include "events.h"
+#include "resources.h"
 #include <fstream>
-
 //
 //
 //namespace not needed, since there are 
@@ -89,23 +89,42 @@ void Room::printRoom(int xpos, int ypos)
 
 
 //make it throw a quest at the end
-//for now its void
+//for now its h
 void Room::roomLoop(Player& player)
 {
     std::vector<Enemy> hostiles;
+    std::vector<Item> loot;
     player.roomPos[0] = 1;
     player.roomPos[1] = 1;
-    for(size_t i = 0; i < enemyCount; i++)
-    {
-        hostiles.push_back();
-    }
+    //for(size_t i = 0; i < enemyCount; i++)
+    //{
+        hostiles.push_back(Enemy(Resources::enemyList[0]));
+    //}
+    loot.push_back(Item(Resources::itemList[7]));
     char moveDirection;
+    std::array<int, 2> preUpdatePos {0, 0};
     while(player.roomPos[0] != 8 && player.roomPos[1] != 8)
     {
+        std::cout << loot[0].itemName << ":" << loot[0].dmg << ":" << loot[0].type << std::endl;
         std::cout << player.roomPos[0] << ":" << player.roomPos[1] << std::endl;
         printRoom(player.roomPos[0], player.roomPos[1]);
         std::cin >> moveDirection;
-        player.dMove(moveDirection);
+        player.dMove(moveDirection, preUpdatePos);
+        switch(map[player.roomPos[0]][player.roomPos[1]])
+        {
+            case '1':
+                player.roomPos[0] = preUpdatePos[0];
+                player.roomPos[1] = preUpdatePos[1];
+                break;    
+            case '2':
+                player.equip(loot[0]);
+                break;
+            case '3':
+                WorldEvent::Fight(player, hostiles[0]);
+                break;
+            default:
+                break;
+        }
         system("clear");
     }
 }
