@@ -71,7 +71,7 @@ Item::Item(std::string propName, double propValue, Item::itemType propType) : it
 	{
 		armour = NULL;
 		dmg = (int)propValue;
-		type = weapon;
+		type = Item::itemType::weapon;
 	}
 	//creating a new armor 
 	else
@@ -80,19 +80,19 @@ Item::Item(std::string propName, double propValue, Item::itemType propType) : it
 		switch (propType)
 		{
 		case Item::chest:
-			type = chest;
+			type = Item::itemType::chest;
 			break;
 
 		case Item::hands:
-			type = hands;
+			type = Item::itemType::hands;
 			break;
 
 		case Item::feet:
-			type = feet;
+			type = Item::itemType::feet;
 			break;
 
 		case Item::head:
-			type = head;
+			type = Item::itemType::head;
 			break;
 		}
 		armour = propValue;
@@ -110,7 +110,7 @@ Item::Item(std::string& statString)
 	{
 		armour = NULL;
 		dmg = stoi(stats[2]);
-		type = weapon;
+		type = (Item::itemType)0;
 	}
 	else
 	{
@@ -118,19 +118,19 @@ Item::Item(std::string& statString)
 		switch (tempTypetoItemType)
 		{
 		case Item::chest:
-			type = chest;
+			type = (Item::itemType)1;
 			break;
 
 		case Item::hands:
-			type = hands;
+			type = (Item::itemType)2;
 			break;
 
 		case Item::feet:
-			type = feet;
+			type = (Item::itemType)3;
 			break;
 
 		case Item::head:
-			type = head;
+			type = (Item::itemType)4;
 			break;
 		}
 		armour = stof(stats[2]);
@@ -167,16 +167,18 @@ Player::Player(std::string initName, int initHP, int initMana, float initMulti, 
 
 int Player::getEntityDmg()
 {
-	std::cout << "succesfully called getEDMG\n";
-	//return basedmg * weapon dmg
+	//std::cout << "succesfully called getEDMG\n";
+	return -(baseDmg * equipment[0]->dmg);
 	//make weapon dmg 1 default B4
-	return 0;
+	//return 0;
 }
 
 
 
-void Player::dMove(char direction)
+void Player::dMove(char direction, std::array<int, 2>& oArray)
 {
+    oArray[0] = roomPos[0];
+    oArray[1] = roomPos[1];
     switch(direction)
     {
         case 'w':
@@ -200,6 +202,7 @@ void Player::dMove(char direction)
 
 void Player::equip(Item& item)
 {
+    std::cout << (char)item.type << std::endl;
 	if (equipment[item.type] == nullptr)
 	{
 		equipment[item.type] = &item;
@@ -214,7 +217,7 @@ void Player::equip(Item& item)
 			std::cout <<"Damage: " << -1 * equipment[item.type]->dmg << "		" << -1 * item.dmg << "\n";
 
 
-		std::cout << "Do you want to switch? (y/n)\n";
+		std::cout << "Do you want to switch? (y/n): ";
 		char takeinvar;
 		std::cin >> takeinvar;
 		if (takeinvar == 'y')
