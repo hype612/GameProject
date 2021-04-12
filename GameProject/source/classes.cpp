@@ -59,9 +59,9 @@ Consumable::Consumable(std::string& statString)
 //	   Item
 //========================
 //
-enum Item::itemType : char
+enum Item::itemType : int
 {
-	weapon = 0, chest, hands, feet, head
+	weapon , chest, hands, feet, head
 };
 
 Item::Item(std::string propName, double propValue, Item::itemType propType) : itemName(propName)
@@ -104,18 +104,18 @@ Item::Item(std::string& statString)
 	using namespace std;
 	std::vector<std::string> stats = splitString(statString, ';');
 	itemName = stats[0];
-	char tempType = stats[1][1];
-	itemType tempTypetoItemType = (itemType)tempType;
-	if (tempTypetoItemType == weapon)
+	int tempType = std::stoi(stats[2]);
+	//itemType tempTypetoItemType = (itemType)tempType;
+	if (tempType == weapon)
 	{
 		armour = NULL;
-		dmg = stoi(stats[2]);
+		dmg = stoi(stats[1]);
 		type = (Item::itemType)0;
 	}
 	else
 	{
 		dmg = NULL;
-		switch (tempTypetoItemType)
+		switch (tempType)
 		{
 		case Item::chest:
 			type = (Item::itemType)1;
@@ -168,7 +168,10 @@ Player::Player(std::string initName, int initHP, int initMana, float initMulti, 
 int Player::getEntityDmg()
 {
 	//std::cout << "succesfully called getEDMG\n";
-	return -(baseDmg * equipment[0]->dmg);
+    if(equipment[0] != nullptr)
+	    return -(baseDmg * equipment[0]->dmg);
+    else
+        return baseDmg;
 	//make weapon dmg 1 default B4
 	//return 0;
 }
@@ -200,12 +203,13 @@ void Player::dMove(char direction, std::array<int, 2>& oArray)
 
 
 
-void Player::equip(Item& item)
+bool Player::equip(Item& item)
 {
     std::cout << (char)item.type << std::endl;
 	if (equipment[item.type] == nullptr)
 	{
 		equipment[item.type] = &item;
+        return true;
 	}
 	else
 	{
@@ -224,10 +228,12 @@ void Player::equip(Item& item)
 		{
 			equipment[item.type] = &item;
 			std::cout << "Switched your item\n";
+            return true;
 		}
 		else
 		{
 			std::cout << "Keeping your original item\n";
+            return false;
 		}
 	}
 }
@@ -283,7 +289,7 @@ int Player::spellCast(int spellNum)
 	}
 	else
 	{
-		std::cout << "Not Enough Mana!\n";
+		std::cout << "NOT ENOUGH MANA!\n";
 		return 0;
 	}
 }
