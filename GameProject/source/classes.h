@@ -48,7 +48,7 @@ public:
 struct Item
 {
 public:
-	enum itemType : char;
+	enum itemType : int;
 	std::string itemName;
 	itemType type;
 	int dmg;
@@ -99,7 +99,7 @@ public:
 
 
     //item related
-	void equip(Item& item);
+	bool equip(Item& item);
 
 
 
