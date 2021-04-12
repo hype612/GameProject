@@ -10,8 +10,10 @@ namespace entityEvent {
 }
 
 namespace WorldEvent {
-	void Fight(Player& player, Entity& enemy)
+	bool Fight(Player& player, Entity& enemy)
 	{
+        system("clear");
+        std::cout << "====================fight=================\n";
 		char action;
 		int i = 0;
 		int& f1Hp = player.entityHP;
@@ -20,6 +22,7 @@ namespace WorldEvent {
 		do
 		{
 			i++;
+            std::cout << player.roomPos[0] << "|" << player.roomPos[1] << std::endl;
 			std::cout << "round " << i << "\n";
 			std::cout << "Your HP: " << f1Hp << " Troll's HP: " << f2Hp << "\n";
 			std::cout << "_______________________________________\n";
@@ -41,13 +44,22 @@ namespace WorldEvent {
 				entityEvent::changeHealth(player.spellCast(1), player);
 				std::cout << " \n";
 				continue;
+            default:
+                std::cout << "NOT AN ACTION!" << std::endl;
+                std::cin.get();
+                continue;
 			}
 		} while (f1Hp > 0 && f2Hp > 0);
 
 		if (f1Hp > f2Hp)
+        {
 			std::cout << "You won the fight!\n";
-		else
+            return true;
+        }
+        else
+        {
 			std::cout << "You lost\n";
-
+            return false;
+        }
 	}
 }
