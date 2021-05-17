@@ -9,6 +9,6 @@ namespace entityEvent{
 
 
 namespace WorldEvent {
-	void Fight(Player& player, Entity& enemy);
+	bool Fight(Player& player, Entity& enemy);
         
 }
