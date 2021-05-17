@@ -4,6 +4,7 @@
 #include "events.h"
 #include "resources.h"
 #include <fstream>
+#include <cstdlib>
 //
 //
 //namespace not needed, since there are 
@@ -14,51 +15,63 @@
 	
 enum Room::tileType : char
 {
-	floor = 0, wall, chest, enemy, prop
+	floor = 0, wall, chest, enemy, door
 };
 
 
-//8 and 8 being the x and y of the room
-//NOTE TO SELF: add flexible sized
-//room class in the future
 
 
-Room::Room(std::string filepath, bool encounter)
+
+Room::Room(std::string filepath)
 {
-    //int x, y = 8;
-	//std::string line;
-	//std::ifstream roomFile(filepath);
-	//for (size_t i = 0; i < 8; i++)
-	//{
-	//	std::getline(roomFile, line);
-	//	for (size_t j = 0; j < 8; j++)
-	//	{
-	//		map[i + j * 8] = (tileType)line[j];
-	//	}
-	//}
+    std::vector<std::string> layoutVector = FileToStringVector(filepath);
+    for(size_t i = 0; i < layoutVector.size(); i++)
+    {
+        map[i] = layoutVector[i];
+        for(size_t j = 0; j < map[i].size(); j++)
+        {
+            switch(map[i][j])
+            {
+                case '2':
+                    lootCount++;
+                    break;
+                case '3':
+                    enemyCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 
 Room::Room(std::vector<std::string>& layout)
 {
-    //int x, y = 8;
-	//for (size_t i = 0; i < 8; i++)
-	//{
-	//	for (size_t j = 0; j < 8; j++)
-	//	{
-	//		map[i + j * 8] = (Room::tileType)tempArray[i + j * 8];
-	//	}
-	//}
     for(size_t i = 0; i < layout.size(); i++)
     {
         map[i] = layout[i];
+        for(size_t j = 0; j < map[i].size(); j++)
+        {
+            switch(map[i][j])
+            {
+                case '2':
+                    lootCount++;
+                    break;
+                case '3':
+                    enemyCount++;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
 
 void Room::printRoom(int xpos, int ypos)
  {
      //map[i + j * v8]
-     std::cout << " 1 = wall, 2 = chest, 3 = enemy\n";
+     std::cout << " 1 = wall, 2 = chest, 3 = enemy 4 = door\n";
      for (size_t i = 0; i < 8; i++)
      {
          for (size_t j = 0; j < 8; j++)
@@ -90,24 +103,48 @@ void Room::printRoom(int xpos, int ypos)
 
 void Room::roomLoop(Player& player)
 {
+    std::cout << "roomloop started" << std::endl;
     std::vector<Enemy> hostiles;
     std::vector<Item> loot;
     player.roomPos[0] = 1;
     player.roomPos[1] = 1;
-    //for(size_t i = 0; i < enemyCount; i++)
-    //{
-        hostiles.push_back(Enemy(Resources::enemyList[0]));
-    //}
-    loot.push_back(Item(Resources::itemList[7]));
+    std::cout << "declared basic vectors and set the players default pos\n";
+    if(enemyCount > 0)
+    {
+        for(size_t i = 0; i < enemyCount; i++)
+        {
+            hostiles.push_back(Enemy(Resources::enemyList[randomNumber(Resources::enemyList.size())]));
+            std::cout << "currently generated enemy: "<< hostiles[i].entityName << std::endl;
+        }
+    }
+    std::cout << "filled hostiles vector\n";
+    if(lootCount > 0)
+    {
+        for(size_t i = 0; i < lootCount; i++)
+        {
+            loot.push_back(Item(Resources::itemList[randomNumber(Resources::itemList.size())]));
+            std::cout << "currently generated item: "<< loot[i].itemName << std::endl;
+        }
+    }
+    std::cout << "filled loot vector\n";
     char moveDirection;
     std::array<int, 2> preUpdatePos {0, 0};
     do
     {
-        std::cout << loot[0].itemName << ":" << loot[0].dmg << ":" << loot[0].type << std::endl;
-        std::cout << player.roomPos[0] << ":" << player.roomPos[1] << std::endl;
+    std::cout << "Player's current stats: \n" << 
+                "weapon's dmg: " << player.equipment[0]->dmg <<
+                "\nweapon's name: " << player.equipment[0]->itemName << "\n";
+        std::cout << "itemcount: " << loot.size() << "\n";
+        std::cout << "enemycount: " << hostiles.size() << "\n";
+
+
+        std::cout << "Your current position: "<< player.roomPos[0] << ":" << player.roomPos[1] << std::endl;
+
+
         printRoom(player.roomPos[0], player.roomPos[1]);
         std::cin >> moveDirection;
         player.dMove(moveDirection, preUpdatePos);
+        int vIndx;
         switch(map[player.roomPos[0]][player.roomPos[1]])
         {
             case '1':
@@ -115,18 +152,29 @@ void Room::roomLoop(Player& player)
                 player.roomPos[1] = preUpdatePos[1];
                 break;    
             case '2':
-                if(player.equip(loot[0]) == true)
+                vIndx = randomNumber(loot.size());
+                //if(player.equip(loot[vIndx]) == true)
+                //{
+                    player.equip(loot[vIndx]);
                     map[player.roomPos[0]][player.roomPos[1]] = '0';
+                    loot.erase(loot.begin() + vIndx);
+                //}
                 break;
             case '3':
-                if(WorldEvent::Fight(player, hostiles[0]))
+                vIndx = randomNumber(hostiles.size());
+                if(WorldEvent::Fight(player, hostiles[vIndx]))
+                {
                     map[player.roomPos[0]][player.roomPos[1]] = '0';
+                    hostiles.erase(hostiles.begin() + vIndx);
+                }
                 else
                 {
                     player.roomPos[0] = 1;
                     player.roomPos[1] = 1;
                 }
                 break;
+            case '4':
+                return;
             default:
                 break;
         }
@@ -134,17 +182,29 @@ void Room::roomLoop(Player& player)
     } while(player.roomPos[0] != 8 && player.roomPos[1] != 8);
 }
 
-//make it throw a quest at the end
-//for now its h
-void dungeonLoop(Player& player)
-{
 
-    //=========================================================
-    //Same goes for this. IDK why I even wrote this, 
-    //I always planned that the player will be able to move
-    //in the room, not just enter it.
-    //__________________________________________
-    //also, just straight up make it take the number of rooms as
-    //an argument
-    //=========================================================
+
+
+//
+//
+//Dungeon
+//
+Dungeon::Dungeon(int dSize)
+{
+    //dungeonMap.reserve(5);
+    for(size_t i = 0; i < dSize; i++)
+    {
+        dungeonMap.push_back(Room(Resources::roomList[randomNumber(Resources::roomList.size())]));
+        dungeonMap[i].printRoom(1, 1);
+        std::cout << "room " << i << " printed" << std::endl;
+    }
+
+}
+
+void Dungeon::DungeonLoop(Player& passedPlayer)
+{
+    for(Room i : dungeonMap)
+    {
+        i.roomLoop(passedPlayer);
+    }
 }
