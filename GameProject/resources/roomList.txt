@@ -1,0 +1,10 @@
+../resources/rooms/bossroom.txt
+../resources/rooms/room.txt
+../resources/rooms/room1.txt
+../resources/rooms/room2.txt
+../resources/rooms/room3.txt
+../resources/rooms/room4.txt
+../resources/rooms/room5.txt
+../resources/rooms/room6.txt
+../resources/rooms/room7.txt
+../resources/rooms/room8.txt

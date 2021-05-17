@@ -1,8 +1,8 @@
 steel sword;15;0
-steel plate armor;0.1;1
-steel plate gloves;0.05;2
-steel plate boots;0.05;3
-steel plate helmet;0.1;4
+steel plate armor;0.1f;1
+steel plate gloves;0.05f;2
+steel plate boots;0.05f;3
+steel plate helmet;0.1f;4
 Myrdin's holy might;50;0
 Tummoug's fiery breath;75;0
-Yoshimura's pinnacle;150;0
+Yoshimura's pinnacle;50;0
