@@ -3,14 +3,6 @@
 #include "main.h"
 
 
-
-//23.03.2021
-//As of now There's a constructor implemented for every class
-//that takes a string as an argument. Later on find a way
-//to merge this into one function/method
-
-
-
 class Spell
 {
 private:
@@ -84,11 +76,10 @@ public:
 
     //basic variables of player
 	std::vector<Consumable> inventory;
-	std::array<Item*, 5> equipment = {nullptr};
+	std::array<std::shared_ptr<Item>, 5> equipment;
 	std::array<Spell, 2> spellbook { Spell("Fireball", -50, 10, "Do you like to play with fire??"), Spell("Tome of Healing", 30, 20, "A mediocre healing spell for those who are not familiar with the way of magic") };
 	size_t dungeonPos, globalPos;
     int roomPos[2] = {0, 0};
-
     //constructor(s) and inherited functions
 	Player(std::string initName, int initHP, int initMana, float initMulti, int initDmg);
 	int getEntityDmg() override;
@@ -99,7 +90,7 @@ public:
 
 
     //item related
-	bool equip(Item& item);
+	bool equip(Item item);
 
 
 
@@ -122,3 +113,4 @@ public:
 	Enemy(std::string name, int hp, int mana, float multi, int dmg);
 	Enemy(std::string& statString);
 };
+
