@@ -13,7 +13,15 @@ namespace WorldEvent {
 	bool Fight(Player& player, Entity& enemy)
 	{
         system("clear");
-        std::cout << "====================fight=================\n";
+
+        std::cout <<
+        " ███████╗██╗ ██████╗ ██╗  ██╗████████╗\n" << 
+        " ██╔════╝██║██╔════╝ ██║  ██║╚══██╔══╝\n" << 
+        " █████╗  ██║██║  ███╗███████║   ██║   \n" << 
+        " ██╔══╝  ██║██║   ██║██╔══██║   ██║   \n" << 
+        " ██║     ██║╚██████╔╝██║  ██║   ██║   \n" << 
+        " ╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   \n";
+                                     
 		char action;
 		int i = 0;
 		int& f1Hp = player.entityHP;
@@ -24,7 +32,7 @@ namespace WorldEvent {
 			i++;
             std::cout << player.roomPos[0] << "|" << player.roomPos[1] << std::endl;
 			std::cout << "round " << i << "\n";
-			std::cout << "Your HP: " << f1Hp << " Troll's HP: " << f2Hp << "\n";
+			std::cout << "Your HP: " << f1Hp << " " << enemy.entityName << " 's HP: " << f2Hp << "\n";
 			std::cout << "_______________________________________\n";
 			std::cout << "What will you do?\n";
 			std::cout << "Basic attack - Q	Fireball(10) - W	Tome of Healing(20) - E\n";
