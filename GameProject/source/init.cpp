@@ -67,11 +67,3 @@ int randomNumber(int maxNumber)
     }
     return 0;
 }
-
-
-//commented out for tests sake 
-//Enemy enemyInit(std::string& enemyStats)
-//{
-//    std::vector<std::string> stats = splitString(enemyStats, ';');
-//    return Enemy(stats[0], std::stoi(stats[1]), std::stoi(stats[2]), std::stof(stats[3]), std::stoi(stats[4]));
-//}
