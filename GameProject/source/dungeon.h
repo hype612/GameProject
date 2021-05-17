@@ -32,12 +32,8 @@ public:
     Dungeon(int dSize);
     void DungeonLoop(Player&);
 private:
-    //for some reason it doesn't work with arrays
-    //it says that the constructor has been deleted
-    //look into it and change into array ASAP
     std::vector<Room> dungeonMap;
 };
 
 
 
-//void dungeonLoop(int roomnumber);
