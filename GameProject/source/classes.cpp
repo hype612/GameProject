@@ -203,12 +203,13 @@ void Player::dMove(char direction, std::array<int, 2>& oArray)
 
 
 
-bool Player::equip(Item& item)
+bool Player::equip(Item item)
 {
     std::cout << (char)item.type << std::endl;
 	if (equipment[item.type] == nullptr)
 	{
-		equipment[item.type] = &item;
+		//equipment[item.type] = &item;
+		equipment[item.type] = std::make_shared<Item>(item);
         return true;
 	}
 	else
@@ -226,7 +227,7 @@ bool Player::equip(Item& item)
 		std::cin >> takeinvar;
 		if (takeinvar == 'y')
 		{
-			equipment[item.type] = &item;
+			equipment[item.type] = std::make_shared<Item>(item);
 			std::cout << "Switched your item\n";
             return true;
 		}
