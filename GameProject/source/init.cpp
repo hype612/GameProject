@@ -38,6 +38,37 @@ void playerInit()
 }
 
 
+int randomNumber(int maxNumber)
+{
+    std::random_device rd;
+    std::mt19937::result_type seed = rd() ^ (
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()
+                ).count() +
+            (std::mt19937::result_type)
+            std::chrono::duration_cast<std::chrono::microseconds>(
+                std::chrono::high_resolution_clock::now().time_since_epoch()
+                ).count() );
+
+    std::mt19937 gen(seed);
+
+    for( unsigned long j = 0; j < 10; ++j )
+    {
+        std::mt19937::result_type n;
+        while( ( n = gen() ) > std::mt19937::max() -
+                                    ( std::mt19937::max() - 5 )%6 )
+        { /* bad value retrieved so get next one */ }
+
+        if(j==9)
+        {
+            return n % maxNumber;
+        }
+    }
+    return 0;
+}
+
+
 //commented out for tests sake 
 //Enemy enemyInit(std::string& enemyStats)
 //{
